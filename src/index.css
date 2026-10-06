@@ -31,7 +31,7 @@ input {
 .page {
   max-width: 920px;
   margin: 0 auto;
-  padding: 72px 24px 96px;
+  padding: 72px 24px 140px;
 }
 
 .hero {
@@ -201,10 +201,10 @@ input {
   color: #d5d5da;
 }
 
-.lesson-interactive {
+.lesson-stack {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .function-plot {
@@ -212,6 +212,43 @@ input {
   height: auto;
   border-radius: 14px;
   background: #0b0d12;
+  touch-action: none;
+}
+
+.function-plot.is-interactive {
+  cursor: grab;
+}
+
+.function-plot.is-grabbing {
+  cursor: grabbing;
+}
+
+.plot-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.plot-tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: #9aa3b2;
+  font-size: 0.82rem;
+}
+
+.plot-tools button {
+  border: 1px solid #2a3140;
+  background: #12151c;
+  color: #f4f4f5;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.example-toggle.wrap {
+  flex-wrap: wrap;
 }
 
 .plot-bg {
@@ -242,6 +279,36 @@ input {
   fill: none;
   stroke: #7eb6ff;
   stroke-width: 2.2;
+}
+
+.plot-overlay {
+  fill: none;
+  stroke: #f4c36a;
+  stroke-width: 2.4;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.plot-caption {
+  margin: 0 0 8px;
+  color: #c5c9d1;
+  font-size: 0.92rem;
+}
+
+.compare-readout {
+  margin: 0;
+  color: #d5d5da;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 800px) {
+  .compare-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .plot-point {
@@ -428,10 +495,8 @@ input[type='range'] {
 }
 
 .home-button {
-  position: fixed;
-  left: 28px;
-  bottom: 28px;
-  z-index: 10;
+  display: inline-block;
+  margin-top: 28px;
   padding: 10px 18px;
   border: 1px solid #2a3140;
   border-radius: 10px;

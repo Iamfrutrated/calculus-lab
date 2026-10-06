@@ -1,31 +1,44 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { FunctionPlot } from '../../components/FunctionPlot'
 import { LessonShell } from '../../components/LessonShell'
 import { MathTex } from '../../components/Math'
 import { compileFunction } from '../../lib/compileFunction'
+import { derivativeFunctions } from '../../lib/catalog'
 import { getTopicBySlug } from '../registry'
 
 const topic = getTopicBySlug('derivative-as-limit')!
 
 export default function DerivativeAsLimitPage() {
-  const [expr, setExpr] = useState('x^2')
+  const [selected, setSelected] = useState(derivativeFunctions[0].id)
+  const [custom, setCustom] = useState('x^2')
   const [xInput, setXInput] = useState('1')
   const [h, setH] = useState(1.4)
-  const fn = useMemo(() => compileFunction(expr), [expr])
+  const preset = derivativeFunctions.find((item) => item.id === selected)
+  const customFn = selected === 'custom' ? compileFunction(custom) : null
+  const fn = selected === 'custom' ? customFn : preset?.fn
+  const view = preset?.view ?? { xMin: -6, xMax: 6, yMin: -4, yMax: 6 }
   const x0 = Number(xInput)
   const xValid = Number.isFinite(x0)
-  const y0 = fn && xValid ? fn(x0) : NaN
-  const y1 = fn && xValid ? fn(x0 + h) : NaN
+  const y0 = fn && xValid ? fn(x0) : null
+  const y1 = fn && xValid ? fn(x0 + h) : null
+  const y0n = y0 == null ? NaN : y0
+  const y1n = y1 == null ? NaN : y1
   const slope =
     h === 0
       ? fn && xValid
-        ? (fn(x0 + 1e-5) - fn(x0)) / 1e-5
+        ? ((fn(x0 + 1e-5) ?? NaN) - (fn(x0) ?? NaN)) / 1e-5
         : NaN
-      : y0 === y0 && y1 === y1
-        ? (y1 - y0) / h
+      : Number.isFinite(y0n) && Number.isFinite(y1n)
+        ? (y1n - y0n) / h
         : NaN
+  const ready = Boolean(fn) && xValid && Number.isFinite(y0n)
 
-  const ready = Boolean(fn) && xValid && Number.isFinite(y0)
+  function pick(id: string) {
+    setSelected(id)
+    const next = derivativeFunctions.find((item) => item.id === id)
+    if (next?.defaultX != null) setXInput(String(next.defaultX))
+    if (next) setCustom(next.expr)
+  }
 
   return (
     <LessonShell topic={topic}>
@@ -41,22 +54,40 @@ export default function DerivativeAsLimitPage() {
           />
           <p>
             The two dots are <MathTex expr="(x, f(x))" /> and{' '}
-            <MathTex expr="(x+h, f(x+h))" />. The line through them is a
-            secant. Slide <MathTex expr="h" /> to 0 and the dots merge into the
-            tangent line — that slope is <MathTex expr="f'(x)" />.
-          </p>
-          <p>
-            Try <MathTex expr="x^2" />, <MathTex expr="\sin(x)" />, or{' '}
-            <MathTex expr="0.2x^3 - x" />.
+            <MathTex expr="(x+h, f(x+h))" />. Slide <MathTex expr="h" /> to 0
+            and they merge into the tangent. Scroll the graph to zoom, drag to
+            pan.
           </p>
         </section>
         <section className="lesson-interactive">
+          <div className="example-toggle wrap">
+            {derivativeFunctions.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className={selected === item.id ? 'is-active' : ''}
+                onClick={() => pick(item.id)}
+              >
+                {item.label}
+              </button>
+            ))}
+            <button
+              type="button"
+              className={selected === 'custom' ? 'is-active' : ''}
+              onClick={() => setSelected('custom')}
+            >
+              Custom
+            </button>
+          </div>
           <div className="field-row">
             <label>
               f(x)
               <input
-                value={expr}
-                onChange={(event) => setExpr(event.target.value)}
+                value={selected === 'custom' ? custom : (preset?.expr ?? custom)}
+                onChange={(event) => {
+                  setSelected('custom')
+                  setCustom(event.target.value)
+                }}
                 spellCheck={false}
               />
             </label>
@@ -71,28 +102,29 @@ export default function DerivativeAsLimitPage() {
           {ready && fn ? (
             <FunctionPlot
               fn={fn}
-              xMin={x0 - 4}
-              xMax={x0 + 4}
-              yMin={y0 - 6}
-              yMax={y0 + 6}
+              viewKey={selected}
+              xMin={view.xMin}
+              xMax={view.xMax}
+              yMin={view.yMin}
+              yMax={view.yMax}
               filledPoints={
                 h === 0
-                  ? [{ x: x0, y: y0 }]
-                  : Number.isFinite(y1)
+                  ? [{ x: x0, y: y0n }]
+                  : Number.isFinite(y1n)
                     ? [
-                        { x: x0, y: y0 },
-                        { x: x0 + h, y: y1 },
+                        { x: x0, y: y0n },
+                        { x: x0 + h, y: y1n },
                       ]
-                    : [{ x: x0, y: y0 }]
+                    : [{ x: x0, y: y0n }]
               }
               lineThrough={
-                h !== 0 && Number.isFinite(y1)
-                  ? { x1: x0, y1: y0, x2: x0 + h, y2: y1 }
+                h !== 0 && Number.isFinite(y1n)
+                  ? { x1: x0, y1: y0n, x2: x0 + h, y2: y1n }
                   : undefined
               }
               tangent={
                 h === 0 && Number.isFinite(slope)
-                  ? { x: x0, y: y0, slope }
+                  ? { x: x0, y: y0n, slope }
                   : undefined
               }
             />

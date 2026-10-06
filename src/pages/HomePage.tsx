@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import { courseBlurb, courses, getTopicsForCourse } from '../topics/registry'
+import { topics } from '../topics/registry'
 
 const DESCRIPTION =
-  'Visual intuition for the ideas that start calculus — not a full course. These first topics are limits, one-sided limits, continuity, the derivative, and the integral. More will be added later.'
+  'Two pictures that start calculus, and a third that puts them together: slope at every point, area as thin slices, then adding the derivative back up until it is the original graph.'
 
 export function HomePage() {
   return (
@@ -12,29 +12,17 @@ export function HomePage() {
         <p>{DESCRIPTION}</p>
       </header>
       <div className="card-stack">
-        {courses.map((course) => {
-          const hasTopics = getTopicsForCourse(course.id).length > 0
-          const className = `image-card course-art-${course.id}${hasTopics ? '' : ' is-disabled'}`
-          const body = (
-            <>
-              <h2>{course.title}</h2>
-              <p>{hasTopics ? `Learn ${courseBlurb(course.id)}.` : courseBlurb(course.id)}</p>
-              <span>{hasTopics ? 'Click to learn more' : 'Coming later'}</span>
-            </>
-          )
-          if (!hasTopics) {
-            return (
-              <div key={course.id} className={className} aria-disabled="true">
-                {body}
-              </div>
-            )
-          }
-          return (
-            <Link key={course.id} to={`/course/${course.id}`} className={className}>
-              {body}
-            </Link>
-          )
-        })}
+        {topics.map((topic) => (
+          <Link
+            key={topic.id}
+            to={`/topic/${topic.slug}`}
+            className={`image-card course-art-${topic.art}`}
+          >
+            <h2>{topic.title}</h2>
+            <p>{topic.summary}</p>
+            <span>Click to learn more</span>
+          </Link>
+        ))}
       </div>
     </div>
   )
