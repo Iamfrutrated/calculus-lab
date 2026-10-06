@@ -384,6 +384,11 @@ input {
   color: #f4f4f5;
 }
 
+.field-row input:read-only {
+  color: #b8b8bd;
+  cursor: default;
+}
+
 .lesson-body {
   min-height: 40vh;
 }

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { FunctionPlot } from '../../components/FunctionPlot'
 import { LessonShell } from '../../components/LessonShell'
 import { MathTex } from '../../components/Math'
-import { compileFunction } from '../../lib/compileFunction'
 import { derivativeFunctions } from '../../lib/catalog'
 import { getTopicBySlug } from '../registry'
 
@@ -10,34 +9,33 @@ const topic = getTopicBySlug('derivative-as-limit')!
 
 export default function DerivativeAsLimitPage() {
   const [selected, setSelected] = useState(derivativeFunctions[0].id)
-  const [custom, setCustom] = useState('x^2')
-  const [xInput, setXInput] = useState('1')
+  const [xInput, setXInput] = useState(String(derivativeFunctions[0].defaultX ?? 1))
   const [h, setH] = useState(1.4)
-  const preset = derivativeFunctions.find((item) => item.id === selected)
-  const customFn = selected === 'custom' ? compileFunction(custom) : null
-  const fn = selected === 'custom' ? customFn : preset?.fn
-  const view = preset?.view ?? { xMin: -6, xMax: 6, yMin: -4, yMax: 6 }
+  const current =
+    derivativeFunctions.find((item) => item.id === selected) ??
+    derivativeFunctions[0]
+  const fn = current.fn
+  const view = current.view
   const x0 = Number(xInput)
   const xValid = Number.isFinite(x0)
-  const y0 = fn && xValid ? fn(x0) : null
-  const y1 = fn && xValid ? fn(x0 + h) : null
+  const y0 = xValid ? fn(x0) : null
+  const y1 = xValid ? fn(x0 + h) : null
   const y0n = y0 == null ? NaN : y0
   const y1n = y1 == null ? NaN : y1
   const slope =
     h === 0
-      ? fn && xValid
+      ? xValid
         ? ((fn(x0 + 1e-5) ?? NaN) - (fn(x0) ?? NaN)) / 1e-5
         : NaN
       : Number.isFinite(y0n) && Number.isFinite(y1n)
         ? (y1n - y0n) / h
         : NaN
-  const ready = Boolean(fn) && xValid && Number.isFinite(y0n)
+  const ready = xValid && Number.isFinite(y0n)
 
   function pick(id: string) {
     setSelected(id)
     const next = derivativeFunctions.find((item) => item.id === id)
     if (next?.defaultX != null) setXInput(String(next.defaultX))
-    if (next) setCustom(next.expr)
   }
 
   return (
@@ -71,25 +69,11 @@ export default function DerivativeAsLimitPage() {
                 {item.label}
               </button>
             ))}
-            <button
-              type="button"
-              className={selected === 'custom' ? 'is-active' : ''}
-              onClick={() => setSelected('custom')}
-            >
-              Custom
-            </button>
           </div>
           <div className="field-row">
             <label>
               f(x)
-              <input
-                value={selected === 'custom' ? custom : (preset?.expr ?? custom)}
-                onChange={(event) => {
-                  setSelected('custom')
-                  setCustom(event.target.value)
-                }}
-                spellCheck={false}
-              />
+              <input value={current.expr} readOnly />
             </label>
             <label>
               x
@@ -99,7 +83,7 @@ export default function DerivativeAsLimitPage() {
               />
             </label>
           </div>
-          {ready && fn ? (
+          {ready ? (
             <FunctionPlot
               fn={fn}
               viewKey={selected}
@@ -129,7 +113,7 @@ export default function DerivativeAsLimitPage() {
               }
             />
           ) : (
-            <p className="lesson-placeholder">Enter a usable f(x) and x.</p>
+            <p className="lesson-placeholder">Enter a usable x.</p>
           )}
           <label className="slider-block">
             h = {h.toFixed(2)}
