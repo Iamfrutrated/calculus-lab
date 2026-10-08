@@ -223,3 +223,291 @@ export const ftcFunctions: CatalogFn[] = [
     areaTo: 6,
   },
 ]
+
+export type MaclaurinFn = CatalogFn & {
+  poly: (x: number, n: number) => number | null
+  tex: (n: number) => string
+  maxDegree: number
+}
+
+function expPoly(x: number, n: number) {
+  let sum = 1
+  let term = 1
+  for (let k = 1; k <= n; k++) {
+    term *= x / k
+    sum += term
+  }
+  return finite(sum)
+}
+
+function sinPoly(x: number, n: number) {
+  let sum = 0
+  let term = x
+  for (let k = 0; 2 * k + 1 <= n; k++) {
+    sum += term
+    term *= (-x * x) / ((2 * k + 2) * (2 * k + 3))
+  }
+  return finite(sum)
+}
+
+function cosPoly(x: number, n: number) {
+  let sum = 1
+  let term = 1
+  for (let k = 0; 2 * k + 2 <= n; k++) {
+    term *= (-x * x) / ((2 * k + 1) * (2 * k + 2))
+    sum += term
+  }
+  return finite(sum)
+}
+
+function geomPoly(x: number, n: number) {
+  if (x === 1) return n >= 0 ? finite(n + 1) : 0
+  let sum = 0
+  let term = 1
+  for (let k = 0; k <= n; k++) {
+    sum += term
+    term *= x
+  }
+  return finite(sum)
+}
+
+function lnPoly(x: number, n: number) {
+  let sum = 0
+  let term = x
+  for (let k = 1; k <= n; k++) {
+    sum += term / k
+    term *= -x
+  }
+  return finite(sum)
+}
+
+function arctanPoly(x: number, n: number) {
+  let sum = 0
+  let term = x
+  for (let k = 0; 2 * k + 1 <= n; k++) {
+    sum += term / (2 * k + 1)
+    term *= -x * x
+  }
+  return finite(sum)
+}
+
+function polyTex(terms: string[]) {
+  if (terms.length === 0) return '0'
+  return terms.join('')
+}
+
+export const maclaurinFunctions: MaclaurinFn[] = [
+  {
+    id: 'exp',
+    label: 'eˣ',
+    expr: 'exp(x)',
+    fn: (x) => finite(Math.exp(x)),
+    poly: expPoly,
+    tex: (n) => {
+      const terms = ['1']
+      if (n >= 1) terms.push('+x')
+      for (let k = 2; k <= n; k++) terms.push(`+\\dfrac{x^{${k}}}{${k}!}`)
+      return polyTex(terms)
+    },
+    maxDegree: 12,
+    view: { xMin: -3.2, xMax: 3.2, yMin: -1, yMax: 8 },
+  },
+  {
+    id: 'sin',
+    label: 'sin(x)',
+    expr: 'sin(x)',
+    fn: (x) => Math.sin(x),
+    poly: sinPoly,
+    tex: (n) => {
+      const terms: string[] = []
+      const names = [
+        'x',
+        '-\\dfrac{x^3}{3!}',
+        '+\\dfrac{x^5}{5!}',
+        '-\\dfrac{x^7}{7!}',
+        '+\\dfrac{x^9}{9!}',
+        '-\\dfrac{x^{11}}{11!}',
+      ]
+      for (let k = 0; 2 * k + 1 <= n && k < names.length; k++) terms.push(names[k])
+      return polyTex(terms)
+    },
+    maxDegree: 11,
+    view: { xMin: -8, xMax: 8, yMin: -2.4, yMax: 2.4 },
+  },
+  {
+    id: 'cos',
+    label: 'cos(x)',
+    expr: 'cos(x)',
+    fn: (x) => Math.cos(x),
+    poly: cosPoly,
+    tex: (n) => {
+      const terms = ['1']
+      const names = [
+        '-\\dfrac{x^2}{2!}',
+        '+\\dfrac{x^4}{4!}',
+        '-\\dfrac{x^6}{6!}',
+        '+\\dfrac{x^8}{8!}',
+        '-\\dfrac{x^{10}}{10!}',
+        '+\\dfrac{x^{12}}{12!}',
+      ]
+      for (let k = 0; 2 * k + 2 <= n && k < names.length; k++) terms.push(names[k])
+      return polyTex(terms)
+    },
+    maxDegree: 12,
+    view: { xMin: -8, xMax: 8, yMin: -2.4, yMax: 2.4 },
+  },
+  {
+    id: 'geom',
+    label: '1/(1−x)',
+    expr: '1/(1-x)',
+    fn: (x) => (Math.abs(x - 1) < 1e-6 ? null : finite(1 / (1 - x))),
+    poly: geomPoly,
+    tex: (n) => {
+      const terms = ['1']
+      if (n >= 1) terms.push('+x')
+      for (let k = 2; k <= n; k++) terms.push(`+x^{${k}}`)
+      return polyTex(terms)
+    },
+    maxDegree: 10,
+    view: { xMin: -1.6, xMax: 1.6, yMin: -2, yMax: 6 },
+  },
+  {
+    id: 'ln1p',
+    label: 'ln(1+x)',
+    expr: 'ln(1+x)',
+    fn: (x) => (x > -1 ? finite(Math.log(1 + x)) : null),
+    poly: lnPoly,
+    tex: (n) => {
+      if (n < 1) return '0'
+      const terms = ['x']
+      for (let k = 2; k <= n; k++) {
+        terms.push(k % 2 === 0 ? `-\\dfrac{x^{${k}}}{${k}}` : `+\\dfrac{x^{${k}}}{${k}}`)
+      }
+      return polyTex(terms)
+    },
+    maxDegree: 10,
+    view: { xMin: -1.2, xMax: 2.2, yMin: -2.5, yMax: 1.6 },
+  },
+  {
+    id: 'arctan',
+    label: 'arctan(x)',
+    expr: 'arctan(x)',
+    fn: (x) => Math.atan(x),
+    poly: arctanPoly,
+    tex: (n) => {
+      if (n < 1) return '0'
+      const terms = ['x']
+      const extras = [
+        '-\\dfrac{x^3}{3}',
+        '+\\dfrac{x^5}{5}',
+        '-\\dfrac{x^7}{7}',
+        '+\\dfrac{x^9}{9}',
+        '-\\dfrac{x^{11}}{11}',
+      ]
+      for (let k = 0; 2 * k + 3 <= n && k < extras.length; k++) terms.push(extras[k])
+      return polyTex(terms)
+    },
+    maxDegree: 11,
+    view: { xMin: -3, xMax: 3, yMin: -2, yMax: 2 },
+  },
+]
+
+export type ContinuityFn = CatalogFn & {
+  probe: number
+  approach: number
+  holes?: Array<{ x: number; y: number }>
+  filled?: Array<{ x: number; y: number }>
+  verticalAsymptotes?: number[]
+  breakJump?: number
+  kind: 'continuous' | 'jump' | 'hole' | 'infinite'
+}
+
+export const continuityFunctions: ContinuityFn[] = [
+  {
+    id: 'x2',
+    label: 'x²',
+    expr: 'x^2',
+    fn: (x) => x * x,
+    probe: 1,
+    approach: 2.2,
+    kind: 'continuous',
+    view: { xMin: -2, xMax: 3.2, yMin: -0.6, yMax: 8 },
+  },
+  {
+    id: 'sin',
+    label: 'sin(x)',
+    expr: 'sin(x)',
+    fn: (x) => Math.sin(x),
+    probe: 0,
+    approach: 2.4,
+    kind: 'continuous',
+    view: { xMin: -4, xMax: 4, yMin: -1.8, yMax: 1.8 },
+  },
+  {
+    id: 'abs',
+    label: '|x|',
+    expr: 'abs(x)',
+    fn: (x) => Math.abs(x),
+    probe: 0,
+    approach: 2.2,
+    kind: 'continuous',
+    view: { xMin: -3, xMax: 3, yMin: -0.4, yMax: 3.2 },
+  },
+  {
+    id: 'exp',
+    label: 'eˣ',
+    expr: 'exp(x)',
+    fn: (x) => finite(Math.exp(x)),
+    probe: 0,
+    approach: 1.8,
+    kind: 'continuous',
+    view: { xMin: -2.4, xMax: 2.4, yMin: -0.4, yMax: 6 },
+  },
+  {
+    id: 'jump',
+    label: 'jump',
+    expr: 'piecewise',
+    fn: (x) => (x < 0 ? -1.15 : 1.35),
+    probe: 0,
+    approach: 2.2,
+    kind: 'jump',
+    filled: [{ x: 0, y: 1.35 }],
+    holes: [{ x: 0, y: -1.15 }],
+    breakJump: 0.18,
+    view: { xMin: -3, xMax: 3, yMin: -2.4, yMax: 2.6 },
+  },
+  {
+    id: 'hole',
+    label: 'hole',
+    expr: '(x^2-1)/(x-1)',
+    fn: (x) => (Math.abs(x - 1) < 1e-8 ? null : finite((x * x - 1) / (x - 1))),
+    probe: 1,
+    approach: 2,
+    kind: 'hole',
+    holes: [{ x: 1, y: 2 }],
+    view: { xMin: -1.5, xMax: 3.2, yMin: -0.6, yMax: 4.2 },
+  },
+  {
+    id: 'moved',
+    label: 'moved point',
+    expr: 'x, but f(0)=1.8',
+    fn: (x) => (Math.abs(x) < 1e-8 ? null : x),
+    probe: 0,
+    approach: 2.2,
+    kind: 'hole',
+    holes: [{ x: 0, y: 0 }],
+    filled: [{ x: 0, y: 1.8 }],
+    view: { xMin: -3, xMax: 3, yMin: -2.2, yMax: 2.6 },
+  },
+  {
+    id: 'inv',
+    label: '1/x',
+    expr: '1/x',
+    fn: (x) => (Math.abs(x) < 1e-6 ? null : finite(1 / x)),
+    probe: 0,
+    approach: 2,
+    kind: 'infinite',
+    verticalAsymptotes: [0],
+    view: { xMin: -3, xMax: 3, yMin: -4, yMax: 4 },
+  },
+]

@@ -9,7 +9,7 @@ export type Topic = {
   summary: string
   order: number
   status: 'ready'
-  art: '1' | '2' | '3'
+  art: '1' | '2' | '3' | '4' | '5'
   page: TopicPage
 }
 
@@ -46,6 +46,28 @@ export const topics: Topic[] = [
     status: 'ready',
     art: '3',
     page: lazy(() => import('./connection/Page')),
+  },
+  {
+    id: 'maclaurin',
+    slug: 'maclaurin',
+    title: 'Maclaurin polynomials',
+    summary:
+      'Stack Taylor terms at 0 and watch the gold polynomial hug the blue curve as the degree climbs.',
+    order: 4,
+    status: 'ready',
+    art: '4',
+    page: lazy(() => import('./maclaurin/Page')),
+  },
+  {
+    id: 'continuity',
+    slug: 'continuity',
+    title: 'Continuity',
+    summary:
+      'Two orbs ride in from the left and the right. If they meet on the graph, it is continuous there.',
+    order: 5,
+    status: 'ready',
+    art: '5',
+    page: lazy(() => import('./continuity/Page')),
   },
 ]
 

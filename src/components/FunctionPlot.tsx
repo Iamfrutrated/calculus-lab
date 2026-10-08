@@ -39,6 +39,8 @@ type FunctionPlotProps = {
   overlayStep?: boolean
   lineThrough?: { x1: number; y1: number; x2: number; y2: number }
   tangent?: { x: number; y: number; slope: number }
+  probeX?: number
+  orbs?: Array<{ x: number; y: number; side: 'left' | 'right' }>
 }
 
 const WIDTH = 640
@@ -211,6 +213,8 @@ export function FunctionPlot({
   overlayStep = true,
   lineThrough,
   tangent,
+  probeX,
+  orbs = [],
 }: FunctionPlotProps) {
   const rawId = useId()
   const clipId = `plot-clip-${rawId.replace(/[^a-zA-Z0-9_-]/g, '')}`
@@ -466,6 +470,24 @@ export function FunctionPlot({
               cy={mapY(point.y, view.yMin, view.yMax)}
               r="5.5"
               className="plot-point"
+            />
+          ))}
+          {probeX != null && Number.isFinite(probeX) ? (
+            <line
+              x1={mapX(probeX, view.xMin, view.xMax)}
+              x2={mapX(probeX, view.xMin, view.xMax)}
+              y1={PAD.top}
+              y2={PAD.top + PLOT_H}
+              className="plot-probe"
+            />
+          ) : null}
+          {orbs.map((orb) => (
+            <circle
+              key={`orb-${orb.side}`}
+              cx={mapX(orb.x, view.xMin, view.xMax)}
+              cy={mapY(orb.y, view.yMin, view.yMax)}
+              r="7"
+              className={orb.side === 'left' ? 'plot-orb-left' : 'plot-orb-right'}
             />
           ))}
         </g>

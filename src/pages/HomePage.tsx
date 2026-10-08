@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { topics } from '../topics/registry'
 
 const DESCRIPTION =
-  'Two pictures that start calculus, and a third that puts them together: slope at every point, area as thin slices, then adding the derivative back up until it is the original graph.'
+  'Slope, area, putting them back together — then polynomials that hug a curve, and whether two approaching orbs can meet on the graph.'
 
 export function HomePage() {
   return (
