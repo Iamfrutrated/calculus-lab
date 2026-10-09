@@ -1,28 +1,28 @@
 import { Link } from 'react-router-dom'
 import { ModeTabs } from '../components/ModeTabs'
-import { topics } from '../topics/registry'
+import { quizTopics } from '../quizzes/catalog'
 
 const DESCRIPTION =
-  'Interactive pictures of calculus: slope, area, putting them back together, polynomials that hug a curve, and orbs that test continuity.'
+  'Check-ins for every main Calculus BC topic. Starter questions for now — the full bank comes later.'
 
-export function HomePage() {
+export function QuizHomePage() {
   return (
     <div className="page home-page">
       <header className="hero">
         <ModeTabs />
-        <h1>Calculus Lab</h1>
+        <h1>Quizzes</h1>
         <p>{DESCRIPTION}</p>
       </header>
       <div className="card-stack">
-        {topics.map((topic) => (
+        {quizTopics.map((topic) => (
           <Link
             key={topic.id}
-            to={`/topic/${topic.slug}`}
+            to={`/quiz/${topic.slug}`}
             className={`image-card course-art-${topic.art}`}
           >
             <h2>{topic.title}</h2>
             <p>{topic.summary}</p>
-            <span>Click to learn more</span>
+            <span>Start check-in</span>
           </Link>
         ))}
       </div>

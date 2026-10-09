@@ -39,6 +39,31 @@ input {
   margin-bottom: 56px;
 }
 
+.mode-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.mode-tabs a {
+  padding: 10px 22px;
+  border: 1px solid #2a3140;
+  border-radius: 999px;
+  background: #12151c;
+  color: #f4f4f5;
+}
+
+.mode-tabs a:hover {
+  filter: brightness(1.08);
+}
+
+.mode-tabs a.is-active {
+  background: #1d4f8f;
+  border-color: #1d4f8f;
+}
+
 .hero h1,
 .lesson-bar h1 {
   margin: 0 0 20px;
@@ -110,6 +135,24 @@ input {
   background:
     radial-gradient(circle at 82% 78%, #4aa3c8 0 64px, transparent 65px),
     linear-gradient(145deg, #061018 0%, #163a48 52%, #071018 100%);
+}
+
+.course-art-6 {
+  background:
+    radial-gradient(circle at 24% 30%, #c9a227 0 58px, transparent 59px),
+    linear-gradient(155deg, #141006 0%, #4a3a12 50%, #0e0b04 100%);
+}
+
+.course-art-7 {
+  background:
+    radial-gradient(circle at 88% 20%, #c46a8a 0 62px, transparent 63px),
+    linear-gradient(140deg, #14080e 0%, #4a1830 52%, #0c0709 100%);
+}
+
+.course-art-8 {
+  background:
+    radial-gradient(circle at 40% 90%, #6b8f3a 0 70px, transparent 71px),
+    linear-gradient(160deg, #0a1208 0%, #2a4018 55%, #070b05 100%);
 }
 
 .image-card h2 {
@@ -514,6 +557,25 @@ input[type='range'] {
 .quiz-explain {
   margin: 10px 0 0;
   color: #b8b8bd;
+}
+
+.quiz-reset {
+  margin-top: 8px;
+  border: 1px solid #2a3140;
+  background: #12151c;
+  color: #f4f4f5;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.quiz-reset:hover {
+  background: #1d4f8f;
+  border-color: #1d4f8f;
+}
+
+.quiz-option:disabled {
+  cursor: default;
 }
 
 .lesson-placeholder {
