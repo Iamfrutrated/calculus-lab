@@ -1,11 +1,9 @@
 import { useMemo, useState } from 'react'
 import { FunctionPlot } from '../../components/FunctionPlot'
-import { LessonShell } from '../../components/LessonShell'
+import { FunctionSelect } from '../../components/FunctionSelect'
+import { SimPanel } from '../../components/SimPanel'
 import { MathTex } from '../../components/Math'
 import { continuityFunctions } from '../../lib/catalog'
-import { getTopicBySlug } from '../registry'
-
-const topic = getTopicBySlug('continuity')!
 
 function formatY(y: number | null) {
   if (y == null || !Number.isFinite(y)) return '—'
@@ -64,7 +62,6 @@ export default function ContinuityPage() {
   }
 
   return (
-    <LessonShell topic={topic}>
       <div className="lesson-stack">
         <section className="lesson-copy">
           <p>
@@ -78,21 +75,16 @@ export default function ContinuityPage() {
             expr="\lim_{x\to c^-}f(x)=\lim_{x\to c^+}f(x)=f(c)"
           />
         </section>
-        <div className="example-toggle wrap">
-          {continuityFunctions.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={selected === item.id ? 'is-active' : ''}
-              onClick={() => {
-                setSelected(item.id)
-                setT(item.approach)
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+        <SimPanel>
+        <FunctionSelect
+          value={selected}
+          options={continuityFunctions.map((item) => ({ id: item.id, label: item.label }))}
+          onChange={(id) => {
+            setSelected(id)
+            const next = continuityFunctions.find((item) => item.id === id)
+            setT(next?.approach ?? 2)
+          }}
+        />
         <p className="plot-caption">
           Left orb (coral) and right orb (mint), approaching x = {c}
         </p>
@@ -127,7 +119,7 @@ export default function ContinuityPage() {
           = {formatY(midY)}
         </p>
         <p className="compare-readout">{verdict}</p>
+        </SimPanel>
       </div>
-    </LessonShell>
   )
 }

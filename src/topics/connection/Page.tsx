@@ -1,11 +1,9 @@
 import { useMemo, useState } from 'react'
 import { FunctionPlot, type RiemannRect } from '../../components/FunctionPlot'
-import { LessonShell } from '../../components/LessonShell'
+import { FunctionSelect } from '../../components/FunctionSelect'
+import { SimPanel } from '../../components/SimPanel'
 import { MathTex } from '../../components/Math'
 import { derivativeFunctions } from '../../lib/catalog'
-import { getTopicBySlug } from '../registry'
-
-const topic = getTopicBySlug('connection')!
 const functions = derivativeFunctions.filter((item) => item.dfn)
 
 type Approx = {
@@ -78,7 +76,6 @@ export default function ConnectionPage() {
         Math.abs(approx.valueAtB - trueB) < 0.02))
 
   return (
-    <LessonShell topic={topic}>
       <div className="lesson-stack">
         <section className="lesson-copy">
           <p>
@@ -101,22 +98,16 @@ export default function ConnectionPage() {
             derivative, many antiderivatives.
           </p>
         </section>
-        <div className="example-toggle wrap">
-          {functions.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={selected === item.id ? 'is-active' : ''}
-              onClick={() => {
-                setSelected(item.id)
-                setDx(0.8)
-                setC(0)
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+        <SimPanel>
+        <FunctionSelect
+          value={selected}
+          options={functions.map((item) => ({ id: item.id, label: item.label }))}
+          onChange={(id) => {
+            setSelected(id)
+            setDx(0.8)
+            setC(0)
+          }}
+        />
         <div className="compare-grid">
           <div>
             <p className="plot-caption">
@@ -197,7 +188,7 @@ export default function ConnectionPage() {
             : ` · Riemann total = ${shifted.valueAtB == null ? '—' : shifted.valueAtB.toFixed(3)}`}
           {merged && !fillExact ? ' · almost merged' : ''}
         </p>
+        </SimPanel>
       </div>
-    </LessonShell>
   )
 }

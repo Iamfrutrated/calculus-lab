@@ -1,11 +1,9 @@
 import { useMemo, useState } from 'react'
 import { FunctionPlot, type RiemannRect } from '../../components/FunctionPlot'
-import { LessonShell } from '../../components/LessonShell'
+import { FunctionSelect } from '../../components/FunctionSelect'
+import { SimPanel } from '../../components/SimPanel'
 import { MathTex } from '../../components/Math'
 import { ftcFunctions } from '../../lib/catalog'
-import { getTopicBySlug } from '../registry'
-
-const topic = getTopicBySlug('integrals-ftc')!
 
 function rightRects(
   fn: (x: number) => number | null,
@@ -39,7 +37,6 @@ export default function FtcPage() {
   const fillExact = dx === 0
 
   return (
-    <LessonShell topic={topic}>
       <div className="lesson-grid">
         <section className="lesson-copy">
           <p>
@@ -55,22 +52,15 @@ export default function FtcPage() {
             and the yellow fills the gray. Scroll to zoom, drag to pan.
           </p>
         </section>
-        <section className="lesson-interactive">
-          <div className="example-toggle wrap">
-            {ftcFunctions.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={selected === item.id ? 'is-active' : ''}
-                onClick={() => {
-                  setSelected(item.id)
-                  setDx(1)
-                }}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
+        <SimPanel>
+          <FunctionSelect
+            value={selected}
+            options={ftcFunctions.map((item) => ({ id: item.id, label: item.label }))}
+            onChange={(id) => {
+              setSelected(id)
+              setDx(1)
+            }}
+          />
           <FunctionPlot
             fn={current.fn}
             viewKey={selected}
@@ -95,8 +85,7 @@ export default function FtcPage() {
               onChange={(event) => setDx(Number(event.target.value))}
             />
           </label>
-        </section>
+        </SimPanel>
       </div>
-    </LessonShell>
   )
 }

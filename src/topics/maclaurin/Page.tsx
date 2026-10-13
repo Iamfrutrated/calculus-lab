@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import { FunctionPlot } from '../../components/FunctionPlot'
-import { LessonShell } from '../../components/LessonShell'
+import { FunctionSelect } from '../../components/FunctionSelect'
+import { SimPanel } from '../../components/SimPanel'
 import { MathTex } from '../../components/Math'
 import { maclaurinFunctions } from '../../lib/catalog'
-import { getTopicBySlug } from '../registry'
-
-const topic = getTopicBySlug('maclaurin')!
 
 export default function MaclaurinPage() {
   const [selected, setSelected] = useState(maclaurinFunctions[0].id)
@@ -16,7 +14,6 @@ export default function MaclaurinPage() {
   const degree = Math.min(n, current.maxDegree)
 
   return (
-    <LessonShell topic={topic}>
       <div className="lesson-stack">
         <section className="lesson-copy">
           <p>
@@ -34,21 +31,15 @@ export default function MaclaurinPage() {
             talking.
           </p>
         </section>
-        <div className="example-toggle wrap">
-          {maclaurinFunctions.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={selected === item.id ? 'is-active' : ''}
-              onClick={() => {
-                setSelected(item.id)
-                setN(2)
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+        <SimPanel>
+        <FunctionSelect
+          value={selected}
+          options={maclaurinFunctions.map((item) => ({ id: item.id, label: item.label }))}
+          onChange={(id) => {
+            setSelected(id)
+            setN(2)
+          }}
+        />
         <MathTex display expr={`P_{${degree}}(x)=${current.tex(degree)}`} />
         <FunctionPlot
           fn={current.fn}
@@ -77,7 +68,7 @@ export default function MaclaurinPage() {
           Gold is the degree-{degree} Maclaurin polynomial for {current.label}.
           Near x = 0 they share the value and the first {degree} derivatives.
         </p>
+        </SimPanel>
       </div>
-    </LessonShell>
   )
 }

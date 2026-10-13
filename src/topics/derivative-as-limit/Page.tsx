@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import { FunctionPlot } from '../../components/FunctionPlot'
-import { LessonShell } from '../../components/LessonShell'
+import { FunctionSelect } from '../../components/FunctionSelect'
+import { SimPanel } from '../../components/SimPanel'
 import { MathTex } from '../../components/Math'
 import { derivativeFunctions } from '../../lib/catalog'
-import { getTopicBySlug } from '../registry'
-
-const topic = getTopicBySlug('derivative-as-limit')!
 
 export default function DerivativeAsLimitPage() {
   const [selected, setSelected] = useState(derivativeFunctions[0].id)
@@ -39,7 +37,6 @@ export default function DerivativeAsLimitPage() {
   }
 
   return (
-    <LessonShell topic={topic}>
       <div className="lesson-grid">
         <section className="lesson-copy">
           <p>
@@ -57,25 +54,17 @@ export default function DerivativeAsLimitPage() {
             pan.
           </p>
         </section>
-        <section className="lesson-interactive">
-          <div className="example-toggle wrap">
-            {derivativeFunctions.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={selected === item.id ? 'is-active' : ''}
-                onClick={() => pick(item.id)}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-          <div className="field-row">
-            <label>
-              f(x)
-              <input value={current.expr} readOnly />
-            </label>
-            <label>
+        <SimPanel>
+          <div className="sim-controls">
+            <FunctionSelect
+              value={selected}
+              options={derivativeFunctions.map((item) => ({
+                id: item.id,
+                label: item.label,
+              }))}
+              onChange={pick}
+            />
+            <label className="x-field">
               x
               <input
                 value={xInput}
@@ -127,8 +116,7 @@ export default function DerivativeAsLimitPage() {
               onChange={(event) => setH(Number(event.target.value))}
             />
           </label>
-        </section>
+        </SimPanel>
       </div>
-    </LessonShell>
   )
 }

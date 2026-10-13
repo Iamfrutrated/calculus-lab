@@ -622,6 +622,346 @@ input[type='range'] {
   color: #b8b8bd;
 }
 
+.workspace {
+  --bg: #eef2f7;
+  --side: #f8fafc;
+  --panel: #ffffff;
+  --panel-2: #f8fafc;
+  --text: #122033;
+  --muted: #5c6d84;
+  --line: #d9e1ec;
+  --accent: #2563eb;
+  --shadow: 0 10px 30px rgb(15 23 42 / 6%);
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.workspace[data-theme='dark'] {
+  --bg: #000;
+  --side: #0c0e13;
+  --panel: #141820;
+  --panel-2: #10141b;
+  --text: #f4f4f5;
+  --muted: #a8b0bd;
+  --line: #2a3140;
+  --accent: #7eb6ff;
+  --shadow: none;
+}
+
+.workspace-side {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  width: 272px;
+  height: 100vh;
+  flex: none;
+  padding: 22px 14px 16px;
+  border-right: 1px solid var(--line);
+  background: var(--side);
+}
+
+.workspace-brand {
+  margin: 0 8px 22px;
+  font-size: 1.15rem;
+  font-weight: 680;
+  letter-spacing: -0.03em;
+}
+
+.workspace-side-label {
+  margin: 0 8px 8px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.workspace-topics {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.workspace-topics a {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.94rem;
+}
+
+.workspace-topics a span {
+  width: 1.3rem;
+  flex: none;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.82rem;
+}
+
+.workspace-topics a:hover {
+  background: rgb(37 99 235 / 8%);
+}
+
+.workspace-topics a.is-active {
+  background: rgb(37 99 235 / 12%);
+  color: var(--accent);
+  font-weight: 640;
+}
+
+.workspace[data-theme='dark'] .workspace-topics a:hover,
+.workspace[data-theme='dark'] .workspace-topics a.is-active {
+  background: #1a2333;
+}
+
+.theme-toggle {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.workspace-main {
+  flex: 1;
+  min-width: 0;
+  padding: 32px 40px 80px;
+}
+
+.workspace-title p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.workspace-title h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  font-weight: 680;
+  letter-spacing: -0.04em;
+}
+
+.view-tabs {
+  display: flex;
+  gap: 28px;
+  margin: 22px 0 26px;
+  border-bottom: 1px solid var(--line);
+}
+
+.view-tabs a {
+  margin-bottom: -1px;
+  padding: 10px 2px;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.view-tabs a.is-active {
+  border-bottom-color: var(--accent);
+  color: var(--text);
+}
+
+.sim-panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px 18px 16px;
+  box-shadow: var(--shadow);
+}
+
+.sim-panel-head {
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sim-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  align-items: end;
+  margin-bottom: 12px;
+}
+
+.fn-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: var(--text);
+  font-weight: 650;
+}
+
+.sim-controls .fn-select {
+  margin-bottom: 0;
+}
+
+.fn-select select,
+.x-field input,
+.workspace .field-row input {
+  min-width: 160px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+.x-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.x-field input {
+  width: 88px;
+  min-width: 0;
+}
+
+.workspace .lesson-copy p,
+.workspace .compare-readout,
+.workspace .slider-block,
+.workspace .plot-caption,
+.workspace .plot-tools,
+.workspace .quiz-explain {
+  color: var(--muted);
+}
+
+.workspace .katex {
+  color: inherit;
+}
+
+.workspace .quiz h3 {
+  display: none;
+}
+
+.workspace .quiz-option {
+  border-color: var(--line);
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+.workspace .quiz-option.is-correct {
+  background: #d9f3e4;
+  border-color: #8dcfab;
+  color: #14532d;
+}
+
+.workspace .quiz-option.is-wrong {
+  background: #fde2e2;
+  border-color: #f0a8a8;
+  color: #7f1d1d;
+}
+
+.workspace[data-theme='dark'] .quiz-option.is-correct {
+  background: #1d5a38;
+  border-color: #1d5a38;
+  color: #f4f4f5;
+}
+
+.workspace[data-theme='dark'] .quiz-option.is-wrong {
+  background: #6a2a2a;
+  border-color: #6a2a2a;
+  color: #f4f4f5;
+}
+
+.workspace .quiz-reset,
+.workspace .plot-tools button {
+  border-color: var(--line);
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+.workspace[data-theme='light'] .plot-bg {
+  fill: #fbfcfe;
+}
+
+.workspace[data-theme='light'] .function-plot {
+  background: #fbfcfe;
+  border: 1px solid var(--line);
+}
+
+.workspace[data-theme='light'] .plot-grid {
+  stroke: #e6ebf2;
+}
+
+.workspace[data-theme='light'] .plot-axis {
+  stroke: #94a3b8;
+}
+
+.workspace[data-theme='light'] .plot-label {
+  fill: #64748b;
+}
+
+.workspace[data-theme='light'] .plot-curve {
+  stroke: #2563eb;
+}
+
+.workspace[data-theme='light'] .plot-hole {
+  fill: #fbfcfe;
+}
+
+.sim-placeholder p {
+  margin: 14px 0 4px;
+  color: var(--muted);
+}
+
+.placeholder-art {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.placeholder-frame {
+  fill: var(--panel-2);
+  stroke: var(--line);
+}
+
+.placeholder-axis {
+  stroke: #94a3b8;
+  stroke-width: 1.4;
+}
+
+.placeholder-curve {
+  fill: none;
+  stroke: #2563eb;
+  stroke-width: 2.4;
+}
+
+.placeholder-dot {
+  fill: #f4c36a;
+  stroke: #fff;
+}
+
+@media (max-width: 800px) {
+  .workspace {
+    flex-direction: column;
+  }
+
+  .workspace-side {
+    position: static;
+    width: 100%;
+    height: auto;
+    max-height: 42vh;
+  }
+}
+
 @media (max-width: 800px) {
   .lesson-bar,
   .lesson-grid,
