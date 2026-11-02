@@ -10,6 +10,7 @@ const simulations: Record<string, LazyExoticComponent<ComponentType>> = {
   derivatives: lazy(() => import('../topics/derivative-as-limit/Page')),
   'definite-integrals': lazy(() => import('../topics/integrals-ftc/Page')),
   'indefinite-integrals': lazy(() => import('../topics/connection/Page')),
+  'rate-of-change': lazy(() => import('../topics/related-rates/Page')),
   'taylor-polynomials': lazy(() => import('../topics/maclaurin/Page')),
 }
 
@@ -24,6 +25,7 @@ export const simulationSlugToLearn: Record<string, string> = {
   connection: 'indefinite-integrals',
   maclaurin: 'taylor-polynomials',
   continuity: 'continuity',
+  'related-rates': 'rate-of-change',
 }
 
 export function getLearnTopic(slug: string): LearnTopic | undefined {
