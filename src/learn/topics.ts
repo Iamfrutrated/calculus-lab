@@ -7,11 +7,16 @@ export type LearnTopic = QuizTopic & {
 
 const simulations: Record<string, LazyExoticComponent<ComponentType>> = {
   continuity: lazy(() => import('../topics/continuity/Page')),
+  limits: lazy(() => import('../topics/limits/Page')),
+  differentiability: lazy(() => import('../topics/differentiability/Page')),
   derivatives: lazy(() => import('../topics/derivative-as-limit/Page')),
   'definite-integrals': lazy(() => import('../topics/integrals-ftc/Page')),
   'indefinite-integrals': lazy(() => import('../topics/connection/Page')),
+  'integration-by-parts': lazy(() => import('../topics/integration-by-parts/Page')),
+  'rate-in-rate-out': lazy(() => import('../topics/rate-in-out/Page')),
   'rate-of-change': lazy(() => import('../topics/related-rates/Page')),
   'taylor-polynomials': lazy(() => import('../topics/maclaurin/Page')),
+  'series-tests': lazy(() => import('../topics/integral-test/Page')),
 }
 
 export const learnTopics: LearnTopic[] = quizTopics.map((topic) => ({

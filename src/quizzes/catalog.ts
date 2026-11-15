@@ -38,41 +38,11 @@ export const quizTopics: QuizTopic[] = [
     ],
   },
   {
-    id: 'one-sided-limits',
-    slug: 'one-sided-limits',
-    title: 'One-sided limits',
-    summary: 'Approach from the left or from the right — they need not agree.',
-    order: 2,
-    art: '2',
-    questions: [
-      {
-        id: 'osl-1',
-        prompt: 'What is',
-        promptMath: '\\displaystyle\\lim_{x\\to 0^-}\\dfrac{|x|}{x}?',
-        options: ['−1', '0', '1', 'does not exist'],
-        correctIndex: 0,
-        explain: 'From the left, |x| = −x, so the ratio is −1.',
-      },
-      {
-        id: 'osl-2',
-        prompt: 'A two-sided limit exists only when the left-hand and right-hand limits…',
-        options: [
-          'are both infinite',
-          'exist and are equal',
-          'exist, even if they differ',
-          'match f(c)',
-        ],
-        correctIndex: 1,
-        explain: 'Left and right must settle on the same number. Matching f(c) is continuity, not existence of the limit.',
-      },
-    ],
-  },
-  {
     id: 'continuity',
     slug: 'continuity',
     title: 'Continuity',
     summary: 'Left, right, and the function value all meet at the same height.',
-    order: 3,
+    order: 2,
     art: '5',
     questions: [
       {
@@ -101,7 +71,7 @@ export const quizTopics: QuizTopic[] = [
     slug: 'derivatives',
     title: 'Derivatives',
     summary: 'Slope of the tangent, written as a limit of secants.',
-    order: 4,
+    order: 3,
     art: '1',
     questions: [
       {
@@ -127,7 +97,7 @@ export const quizTopics: QuizTopic[] = [
     slug: 'differentiability',
     title: 'Differentiability',
     summary: 'A derivative at a point needs a single tangent — no corners or jumps.',
-    order: 5,
+    order: 4,
     art: '3',
     questions: [
       {
@@ -161,7 +131,7 @@ export const quizTopics: QuizTopic[] = [
     slug: 'rate-in-rate-out',
     title: 'Rate-in rate-out',
     summary: 'Net change is what enters minus what leaves.',
-    order: 6,
+    order: 5,
     art: '2',
     questions: [
       {
@@ -190,7 +160,7 @@ export const quizTopics: QuizTopic[] = [
     slug: 'rate-of-change',
     title: 'Rate of change problems',
     summary: 'How fast a quantity grows, including related rates.',
-    order: 7,
+    order: 6,
     art: '4',
     questions: [
       {
@@ -210,35 +180,11 @@ export const quizTopics: QuizTopic[] = [
     ],
   },
   {
-    id: 'particle-motion',
-    slug: 'particle-motion',
-    title: 'Particle motion',
-    summary: 'Position, velocity, and acceleration on a line.',
-    order: 8,
-    art: '6',
-    questions: [
-      {
-        id: 'pm-1',
-        prompt: 'If s(t) is position, then velocity is…',
-        options: ['s(t)', 's′(t)', 's″(t)', '∫ s'],
-        correctIndex: 1,
-        explain: 'Velocity is the derivative of position. Acceleration is the derivative of velocity.',
-      },
-      {
-        id: 'pm-2',
-        prompt: 'A particle is instantaneously at rest when…',
-        options: ['s(t) = 0', 'v(t) = 0', 'a(t) = 0', 's(t) is max'],
-        correctIndex: 1,
-        explain: 'At rest means velocity is zero. It may or may not be a turning point.',
-      },
-    ],
-  },
-  {
     id: 'definite-integrals',
     slug: 'definite-integrals',
     title: 'Definite integrals',
     summary: 'Signed area, accumulated as a Riemann sum with dx → 0.',
-    order: 9,
+    order: 7,
     art: '2',
     questions: [
       {
@@ -264,7 +210,7 @@ export const quizTopics: QuizTopic[] = [
     slug: 'indefinite-integrals',
     title: 'Indefinite integrals',
     summary: 'A family of antiderivatives — don’t forget +C.',
-    order: 10,
+    order: 8,
     art: '7',
     questions: [
       {
@@ -290,7 +236,7 @@ export const quizTopics: QuizTopic[] = [
     slug: 'integration-by-parts',
     title: 'Integration by parts',
     summary: 'Undo a product rule: ∫ u dv = uv − ∫ v du.',
-    order: 11,
+    order: 9,
     art: '3',
     questions: [
       {
@@ -315,46 +261,11 @@ export const quizTopics: QuizTopic[] = [
     ],
   },
   {
-    id: 'partial-fractions',
-    slug: 'partial-fractions',
-    title: 'Partial fraction decomposition',
-    summary: 'Split a rational function into pieces you can integrate.',
-    order: 12,
-    art: '8',
-    questions: [
-      {
-        id: 'pf-1',
-        prompt: 'Decompose',
-        promptMath: '\\dfrac{1}{x(x+1)}',
-        options: [
-          '1/x + 1/(x+1)',
-          '1/x − 1/(x+1)',
-          'x + (x+1)',
-          '1/(x+1) − 1/x',
-        ],
-        correctIndex: 1,
-        explain: '1/x − 1/(x+1) has common denominator x(x+1) and numerator (x+1) − x = 1.',
-      },
-      {
-        id: 'pf-2',
-        prompt: 'Before decomposing p(x)/q(x), you should…',
-        options: [
-          'differentiate p',
-          'make sure the fraction is proper (deg p < deg q)',
-          'set q(x) = 0 and stop',
-          'replace x with 0',
-        ],
-        correctIndex: 1,
-        explain: 'If the numerator’s degree is at least the denominator’s, divide first, then decompose the remainder.',
-      },
-    ],
-  },
-  {
     id: 'taylor-polynomials',
     slug: 'taylor-polynomials',
     title: 'Taylor polynomials',
     summary: 'Match value and derivatives at a center; Maclaurin is the case a = 0.',
-    order: 13,
+    order: 10,
     art: '4',
     questions: [
       {
@@ -381,30 +292,30 @@ export const quizTopics: QuizTopic[] = [
   {
     id: 'series-tests',
     slug: 'series-tests',
-    title: 'Series tests',
-    summary: 'Decide whether an infinite sum settles or blows up.',
-    order: 14,
+    title: 'Integral test',
+    summary: 'Compare a series with an improper integral of a positive, decreasing function.',
+    order: 11,
     art: '1',
     questions: [
       {
         id: 'ser-1',
-        prompt: 'The harmonic series',
-        promptMath: '\\sum 1/n',
-        options: [
-          'converges to 1',
-          'converges to 0',
-          'diverges',
-          'converges only for even n',
-        ],
-        correctIndex: 2,
-        explain: 'The harmonic series diverges, even though terms go to 0. Terms → 0 is necessary, not sufficient.',
+        prompt: 'The integral test needs f positive, continuous, and…',
+        options: ['increasing', 'decreasing', 'periodic', 'bounded above only'],
+        correctIndex: 1,
+        explain: 'f has to be positive, continuous, and decreasing on [N, ∞). Then the series and the integral converge or diverge together.',
       },
       {
         id: 'ser-2',
-        prompt: 'A geometric series Σ r^n converges when…',
-        options: ['r > 1', '|r| < 1', 'r = 1', '|r| ≥ 1'],
+        prompt: 'The integral test says Σ 1/n diverges because…',
+        promptMath: '\\int_1^\\infty \\frac{1}{x}\\,dx',
+        options: [
+          'equals 1',
+          'diverges',
+          'equals 0',
+          'converges to a finite number',
+        ],
         correctIndex: 1,
-        explain: 'Need |common ratio| strictly less than 1. Then the sum is 1/(1 − r) if it starts at n = 0.',
+        explain: '∫ dx/x from 1 to ∞ is ln x, which grows without bound, so the harmonic series diverges with it.',
       },
     ],
   },

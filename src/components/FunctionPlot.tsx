@@ -38,6 +38,7 @@ type FunctionPlotProps = {
   overlayPoints?: Point[]
   overlayStep?: boolean
   lineThrough?: { x1: number; y1: number; x2: number; y2: number }
+  secants?: Array<{ x1: number; y1: number; x2: number; y2: number; side: 'left' | 'right' }>
   tangent?: { x: number; y: number; slope: number }
   probeX?: number
   orbs?: Array<{ x: number; y: number; side: 'left' | 'right' }>
@@ -48,6 +49,8 @@ const HEIGHT = 400
 const PAD = { left: 48, right: 16, top: 16, bottom: 36 }
 const PLOT_W = WIDTH - PAD.left - PAD.right
 const PLOT_H = HEIGHT - PAD.top - PAD.bottom
+/** Data units of y per data unit of x so one unit is the same length on both axes. */
+export const PLOT_EQUAL_SCALE = PLOT_H / PLOT_W
 
 function mapX(x: number, xMin: number, xMax: number) {
   return PAD.left + ((x - xMin) / (xMax - xMin)) * PLOT_W
@@ -212,6 +215,7 @@ export function FunctionPlot({
   overlayPoints = [],
   overlayStep = true,
   lineThrough,
+  secants = [],
   tangent,
   probeX,
   orbs = [],
@@ -424,6 +428,18 @@ export function FunctionPlot({
           {paths.map((d, i) => (
             <path key={i} d={d} className="plot-curve" />
           ))}
+          {secants.map((seg) =>
+            [seg.x1, seg.y1, seg.x2, seg.y2].every(Number.isFinite) ? (
+              <line
+                key={`sec-${seg.side}`}
+                x1={mapX(seg.x1, view.xMin, view.xMax)}
+                y1={mapY(seg.y1, view.yMin, view.yMax)}
+                x2={mapX(seg.x2, view.xMin, view.xMax)}
+                y2={mapY(seg.y2, view.yMin, view.yMax)}
+                className={seg.side === 'left' ? 'plot-secant-left' : 'plot-secant-right'}
+              />
+            ) : null,
+          )}
           {overlaySample.map((d, i) => (
             <path key={`ov-${i}`} d={d} className="plot-overlay" />
           ))}

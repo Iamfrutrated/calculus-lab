@@ -511,3 +511,86 @@ export const continuityFunctions: ContinuityFn[] = [
     view: { xMin: -3, xMax: 3, yMin: -4, yMax: 4 },
   },
 ]
+
+export type DifferentiabilityFn = {
+  id: string
+  label: string
+  fn: (x: number) => number | null
+  defaultC: number
+  cMin: number
+  cMax: number
+  dxMax: number
+  view: PlotView
+  holes?: Array<{ x: number; y: number }>
+  filled?: Array<{ x: number; y: number }>
+  verticalAsymptotes?: number[]
+  breakJump?: number
+}
+
+export const differentiabilityFunctions: DifferentiabilityFn[] = [
+  {
+    id: 'abs',
+    label: '|x|',
+    fn: (x) => Math.abs(x),
+    defaultC: 0,
+    cMin: -2,
+    cMax: 2,
+    dxMax: 1.6,
+    view: { xMin: -3, xMax: 3, yMin: -0.4, yMax: 3.2 },
+  },
+  {
+    id: 'x2',
+    label: 'x²',
+    fn: (x) => x * x,
+    defaultC: 1,
+    cMin: -2,
+    cMax: 2,
+    dxMax: 1.6,
+    view: { xMin: -2.5, xMax: 2.5, yMin: -0.6, yMax: 6 },
+  },
+  {
+    id: 'sqrt',
+    label: '√x',
+    fn: (x) => (x < 0 ? null : finite(Math.sqrt(x))),
+    defaultC: 0,
+    cMin: 0,
+    cMax: 4,
+    dxMax: 1.6,
+    view: { xMin: -1.2, xMax: 4.5, yMin: -0.4, yMax: 2.4 },
+  },
+  {
+    id: 'jump',
+    label: 'jump',
+    fn: (x) => (x < 0 ? -1.15 : 1.35),
+    defaultC: 0,
+    cMin: -2,
+    cMax: 2,
+    dxMax: 1.6,
+    holes: [{ x: 0, y: -1.15 }],
+    filled: [{ x: 0, y: 1.35 }],
+    breakJump: 0.18,
+    view: { xMin: -3, xMax: 3, yMin: -2.4, yMax: 2.6 },
+  },
+  {
+    id: 'hole',
+    label: 'hole',
+    fn: (x) => (Math.abs(x - 1) < 1e-8 ? null : finite((x * x - 1) / (x - 1))),
+    defaultC: 1,
+    cMin: -1,
+    cMax: 3,
+    dxMax: 1.6,
+    holes: [{ x: 1, y: 2 }],
+    view: { xMin: -1.5, xMax: 3.2, yMin: -0.6, yMax: 4.2 },
+  },
+  {
+    id: 'inv',
+    label: '1/x',
+    fn: (x) => (Math.abs(x) < 1e-6 ? null : finite(1 / x)),
+    defaultC: 0,
+    cMin: -2,
+    cMax: 2,
+    dxMax: 1.4,
+    verticalAsymptotes: [0],
+    view: { xMin: -3, xMax: 3, yMin: -4, yMax: 4 },
+  },
+]
